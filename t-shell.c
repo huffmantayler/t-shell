@@ -120,6 +120,19 @@ void print_file_contents_with_syntax_highlighting(char *input) {
     }
 }
 
+void clear() {
+    printf("\033[H\033[J");
+}
+
+void print_history() {
+    HIST_ENTRY **history = history_list();
+    if (history) {
+        for (int i = 0; history[i]; i++) {
+            printf("%d: %s\n", i + 1, history[i]->line);
+        }
+    }
+}
+
 int loop() {
     rl_attempted_completion_function = command_completion;
     while(1) {
@@ -140,6 +153,10 @@ int loop() {
                 print_current_directory();
             } else if(strcmp(command, "cat") == 0) {
                 print_file_contents_with_syntax_highlighting(input);
+            } else if(strcmp(command, "history") == 0) {
+                print_history();
+            } else if(strcmp(command, "clear") == 0) {
+                clear();
             } else if (strcmp(command, "exit") == 0) {
                 break;
             } else {
